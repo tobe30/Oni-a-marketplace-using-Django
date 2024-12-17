@@ -784,21 +784,9 @@ Inner Banner Area
   color: var(--whiteColor);
 }
 
-.inner-bg1 {
-  background-image: url(../images/inner-banner/inner-banner1.jpg);
-}
 
-.inner-bg2 {
-  background-image: url(../images/inner-banner/inner-banner2.jpg);
-}
 
-.inner-bg3 {
-  background-image: url(../images/inner-banner/inner-banner3.jpg);
-}
 
-.inner-bg4 {
-  background-image: url(../images/product-banner.jpg);
-}
 
 .inner-bg5 {
   background-image: url(../images/product-banner1.jpg);
@@ -809,33 +797,15 @@ Inner Banner Area
 
 }
 
-.inner-bg7 {
-  background-image: url(../images/inner-banner/inner-banner7.jpg);
-}
 
-.inner-bg8 {
-  background-image: url(../images/inner-banner/inner-banner8.jpg);
-}
 
 .inner-bg9 {
   background-image: url(../images/product-banner1.jpg);
 }
 
-.inner-bg10 {
-  background-image: url(../images/inner-banner/inner-banner10.jpg);
-}
 
-.inner-bg11 {
-  background-image: url(../images/inner-banner/inner-banner11.jpg);
-}
 
-.inner-bg12 {
-  background-image: url(../images/inner-banner/inner-banner12.jpg);
-}
 
-.inner-bg13 {
-  background-image: url(../images/inner-banner/inner-banner13.jpg);
-}
 
 .inner-shape img:nth-child(1) {
   position: absolute;
@@ -3464,7 +3434,6 @@ Featured Area
         right: 0;
         width: 100%;
         height: auto;
-        background: url(../img/content/backgrounds/call-to-action-bg-2.png) no-repeat 0 0;
         background-size: cover;
         border-radius: 25px;
     }
@@ -4225,7 +4194,6 @@ Author Area
 }
 
 .author-area-bg2 {
-  background-image: url(../images/author/author-bg.png);
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -5146,15 +5114,7 @@ Collections Area End
   background-color: var(--whiteColor);
   border-radius: 5px;
 }
-.widget-popular-post .item .thumb .full-image.bg1 {
-  background-image: url(../images/blog/blog-img1.jpg);
-}
-.widget-popular-post .item .thumb .full-image.bg2 {
-  background-image: url(../images/blog/blog-img2.jpg);
-}
-.widget-popular-post .item .thumb .full-image.bg3 {
-  background-image: url(../images/blog/blog-img3.jpg);
-}
+
 .widget-popular-post .item .info {
   overflow: hidden;
   padding: 6px 0;
@@ -6581,7 +6541,6 @@ Animation CSS
 }
 
 
-/*# sourceMappingURL=style.css.map */
 .profile-area-dashboard {
   width: 100%;
   text-align: -webkit-center;
