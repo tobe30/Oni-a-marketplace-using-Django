@@ -11,6 +11,7 @@ from userauths.models import Profile
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 
+@login_required
 def Productitem(request):
     categories = Category.objects.all()
 
