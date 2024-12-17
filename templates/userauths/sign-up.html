@@ -73,7 +73,7 @@
                     <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
                     <label class="form-check-label" for="form1Example3">You agree to our terms and condition </label>
                   </div>
-                  <a href="#!">Sign in?</a>
+                  <a href="{% url 'userauths:sign-in' %}">Sign in?</a>
                 </div>
       
                 <!-- Submit button -->
@@ -82,13 +82,9 @@
                 <button type="submit">Sign up</button>
               </div>
                 
-                      <center> <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p></center>
                 
       
-                <a data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" style="background-color: #fff; color: #000; border-color: #ccc;" href="#!"
-                  role="button">
-                  <i class="bi bi-google me-2" style="color: black;"></i>Continue with Google
-                </a>
+              
                 </div>
                 </div>
               </form>
