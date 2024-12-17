@@ -1,0 +1,165 @@
+{% extends "include/base.html"%}
+
+{% block content%}
+{% load static %}
+{% load humanize %}
+
+
+<div class="modal fade fade-scale searchmodal" id="searchmodal" tabindex="-1" role="dialog">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-bs-dismiss="modal">
+<i class="ri-close-line"></i>
+</button>
+</div>
+<div class="modal-body">
+<form class="modal-search-form">
+<input type="search" class="search-field" placeholder="Search...">
+<button type="submit"><i class="ri-search-line"></i></button>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="inner-banner inner-bg9">
+<div class="container">
+<div class="inner-title">
+<h3>Vendors</h3>
+<ul>
+<li>
+<a href="index.html">Home</a>
+</li>
+<li>Pages</li>
+<li>Authors</li>
+</ul>
+<div class="inner-shape">
+<img src="{% static 'assets/images/inner-banner/inner-shape1.png' %}" alt="Images">
+<img src="{% static 'assets/images/inner-banner/inner-shape2.png' %}" alt="Images">
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="author-widget-bg author-area-bg pt-100 pb-70">
+<div class="container">
+<div class="section-title">
+<h2>Vendors</h2>
+</div>
+<div class="row pt-45">
+    {% for p in profiles %}
+    {% if request.user.is_authenticated %}
+    {% if request.user != p.user %}
+    <div class="col-lg-3 col-6">
+          
+      <div class="creator-item">
+        <div class="creator-cover">
+          <img src="{% static 'assets/images/shapes-big.png' %}" alt="">
+        </div>
+     
+        <div class="creator-wrapper">
+
+          <div class="creator-info-wrapper">
+            <div class="creator-info">
+              <div class="avatar box-64">
+                <a href="{% url 'core:seller_profile' p.user.username %}">
+                  <img src="{{ p.image.url }}" alt="avatar"><span class="verified"><svg class="crumina-icon">
+                      <use xlink:href="#check-icon"></use>
+                    </svg></span></a>
+              </div>
+              <div class="title"><a href="08-profile-page.html">{{ p.user.username }}</a></div>
+              <div class="item-meta"><span class="gradient-text">@{{ p.user.username }}</span></div>
+            </div>
+            <div class="follow-me">
+                
+                    <form method="POST" action="{% url 'items:follow_unfollow' p.user.id %}?next={{ request.path }}">
+                      {% csrf_token %}
+                      {% if p.is_following %}
+                        <button type="submit" class="btn btn-small btn-fuchsia">Unfollow!</button>
+                      {% else %}
+                        <button type="submit" class="btn btn-small btn-dark">Follow!</button>
+                      {% endif %}
+                    </form>
+                 
+              </div>
+          </div>
+          <ul class="social-icons-list">
+        <li class="social-icon icon-border"><a href="{{p.whatsapp}}">
+              <i class="bi bi-whatsapp"></i>
+               </a></li>
+            <li class="social-icon icon-border"><a href="{{p.facebook}}"><svg class="crumina-icon">
+                  <use xlink:href="#facebook-icon"></use>
+                </svg></a></li>
+            <li class="social-icon icon-border"><a href="{{p.instagram}}"><svg class="crumina-icon">
+                  <use xlink:href="#instagram-icon"></use>
+                </svg></a></li>
+          </ul>
+         </div>
+       
+      </div>
+     
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="col-lg-3 col-6">
+          
+        <div class="creator-item">
+          <div class="creator-cover">
+            <img src="{% static 'assets/images/shapes-big.png' %}" alt="">
+          </div>
+       
+          <div class="creator-wrapper">
+  
+            <div class="creator-info-wrapper">
+              <div class="creator-info">
+                <div class="avatar box-64">
+                  <a href="{% url 'core:seller_profile' p.user.username %}">
+                    <img src="{{ p.image.url }}" alt="avatar"><span class="verified"><svg class="crumina-icon">
+                        <use xlink:href="#check-icon"></use>
+                      </svg></span></a>
+                </div>
+                <div class="title"><a href="08-profile-page.html">{{ p.user.username }}</a></div>
+                <div class="item-meta"><span class="gradient-text">@{{ p.user.username }}</span></div>
+              </div>
+              <div class="follow-me">
+                  
+                      <form method="POST" action="{% url 'userauths:sign-in'%}">
+                        {% csrf_token %}
+                        {% if p.is_following %}
+                          <button type="submit" class="btn btn-small btn-fuchsia">Unfollow!</button>
+                        {% else %}
+                          <button type="submit" class="btn btn-small btn-dark">Follow!</button>
+                        {% endif %}
+                      </form>
+                   
+                </div>
+            </div>
+            <ul class="social-icons-list">
+          <li class="social-icon icon-border"><a href="{{p.whatsapp}}">
+                <i class="bi bi-whatsapp"></i>
+                 </a></li>
+              <li class="social-icon icon-border"><a href="{{p.facebook}}"><svg class="crumina-icon">
+                    <use xlink:href="#facebook-icon"></use>
+                  </svg></a></li>
+              <li class="social-icon icon-border"><a href="{{p.instagram}}"><svg class="crumina-icon">
+                    <use xlink:href="#instagram-icon"></use>
+                  </svg></a></li>
+            </ul>
+           </div>
+         
+        </div>
+       
+      </div>
+    {% endif %}
+    {% endfor %}
+    </div>
+</div>
+</div>
+
+
+
+{% endblock content %}
+

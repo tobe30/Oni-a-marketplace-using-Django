@@ -1,0 +1,127 @@
+{% extends "include/base.html" %}
+
+{% block content %}
+{% load static %}
+{% load humanize %}
+
+<style>
+  input[type="range"] {
+    -webkit-appearance: none;
+    margin-right: 15px;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+    background-image: linear-gradient(#3bb77e, #3bb77e);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 100%;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #3bb77e;
+    cursor: ew-resize;
+    box-shadow: 0 0 2px 0 #555;
+    transition: background .3s ease-in-out;
+  }
+
+  input[type=range]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+  }
+</style>
+
+<div class="inner-banner inner-bg4">
+  <div class="container">
+    <div class="inner-title">
+      <h3>Discover All Onitsha Products</h3>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li>Discover</li>
+        <li>Products</li>
+      </ul>
+      <div class="inner-shape">
+        <img src="{% static 'assets/images/inner-banner/inner-shape1.png' %}" alt="Images">
+        <img src="{% static 'assets/images/inner-banner/inner-shape2.png' %}" alt="Images">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="discover-area pt-100 pb-70">
+  <div class="container">
+    <div class="section-title">
+      <h2>All Tags</h2>
+    </div>
+    <div class="row pt-45">
+      <div class="col-lg-3">
+       
+      </div>
+
+      <div class="col-lg-9">
+        <div class="row justify-content-center" id="filtered-product">
+          {% for p in product %}
+            <div class="col-lg-4 col-md-6">
+              <div class="featured-item">
+                <div class="featured-item-wrapper">
+                  <div class="featured-item-content">
+                    <form action="{% url 'core:like_product' p.id %}" method="post" class="like-form">
+                      {% csrf_token %}
+                      <div class="fav-counter {% if p.id in liked_products %}liked{% endif %}" data-product-id="{{ p.id }}">
+                        <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+                          <i class="bi bi-heart"></i>
+                        </button>
+                        <span class="count">{{ p.likes }}</span>
+                      </div>
+                    </form>
+
+                    <div class="featured-item-image">
+                      <a href="{% url 'core:product-details' p.pid %}"><img src="{{ p.image.url }}" width="304" height="340" alt="" loading="lazy"></a>
+                    </div>
+
+                    <div class="featured-item-info">
+                      <div class="title"><a href="{% url 'core:product-details' p.pid %}">{{ p.title }}</a></div>
+                      <div class="item-meta">
+                        <span class="avatar box-26">
+                          <a href="08-profile-page.html">
+                            <img src="{{ p.user.profile.image.url }}" height="52" width="52" alt="" loading="lazy">
+                          </a>
+                          <span class="verified"><svg class="crumina-icon"><use xlink:href="#check-icon"></use></svg></span>
+                        </span>
+                        {{ p.user.profile.user }}
+                      </div>
+                      <div class="featured-bidding-section">
+                        <div class="featured-item-pricebox">
+                          <div class="price">₦{{ p.price|intcomma }}</div>
+                        </div>
+                        <form action="{% url 'items:saved' p.id %}" method="POST" class="save-form" data-product-id="{{ p.id }}">
+                          {% csrf_token %}
+                          <button type="button" class="pd-detail__click-wrap save-button" data-product-id="{{ p.id }}">
+                            {% if p in request.user.profile.saved_products.all %}
+                              <i class="bi bi-bookmark-fill"></i>
+                            {% else %}
+                              <i class="bi bi-bookmark"></i>
+                            {% endif %}
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+             <center> <h1 style="color: red;">No products found.</h1> </center>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

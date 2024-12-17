@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/fonts/remixicon.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/css/owl.carousel.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/owl.theme.default.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/css/magnific-popup.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/css/meanmenu.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'assets/bootstrap-icons/bootstrap-icons.css' %}">
+<link rel="stylesheet" href="{% static 'assets/swiper/swiper-bundle.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/css/theme-dark.css' %}">
+
+<title>Oni - Marketplace</title>
+<link rel="icon" type="image/png" href="{% static 'assets/images/onitsha.png' %}">
+</head>
+<body>
+    
+    <section class="vh-100">
+        <div class="container py-5 h-100">
+          <div class="row d-flex align-items-center justify-content-center h-100">
+            <div class="col-md-8 col-lg-7 col-xl-6">
+              <img src="{% static 'assets/images/onitsha-img.png' %}"
+                class="img-fluid" alt="Phone image">
+            </div>
+            <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+
+              <h3 class="display-4 fs-7">Sign In </h3>
+
+              {% if messages %}
+            {% for message in messages %}
+                <strong style="color: red;">{{ message }}</strong>
+                      {% endfor %}
+          {% endif %}
+              <form class="mt-5" method="POST">
+                {% csrf_token %}
+                <!--imput your full name-->
+                <div class="row gy-4 align-items-center mb-4">
+                <div data-mdb-input-init class="col-12 mb-2">
+                  <input type="email" name="email" id="form1Example13" placeholder="Your Email Address" class="form-control" />
+                 
+                </div>
+                <!-- Email input -->
+                <div data-mdb-input-init class="col-12 mb-2">
+                  <input type="password" name="password" id="form1Example13" placeholder="Your Password" class="form-control" />
+                 
+                </div>
+      
+                <div class="d-flex justify-content-around align-items-center">
+                  <!-- Checkbox -->
+                  <div class="">
+                    <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
+                    <label class="form-check-label" for="form1Example3">You agree to our terms and condition </label>
+                  </div>
+                  <a href="#!">Forgot password?</a>
+                </div>
+      
+                <!-- Submit button -->
+                <div class="row mb-4 align-items-center">
+                  <div class="sign">
+                <button type="submit">Sign In</button>
+              </div>
+                
+                      <center> <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p></center>
+                
+      
+                <a data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" style="background-color: #fff; color: #000; border-color: #ccc;" href="#!"
+                  role="button">
+                  <i class="bi bi-google me-2" style="color: black;"></i>Continue with Google
+                </a>
+                </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>>
+
+
+    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    
+    <script src="{% static 'assets/js/magnific-popup.min.js' %}"></script>
+    
+    <script src="{% static 'assets/js/meanmenu.min.js' %}"></script>
+    
+    <script src="{% static 'assets/js/owl.carousel.min.js' %}"></script>
+    
+    <script src="{% static 'assets/js/countdown.min.js' %}"></script>
+    
+    <script src="{% static 'assets/js/ajaxchimp.min.js' %}"></script>
+    
+    <script src="{% static 'assets/js/form-validator.min.js' %}"></script>
+    
+    <script src="{% static 'assets/js/contact-form-script.js' %}"></script>
+    <script src="{% static 'assets/swiper/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script async src="{% static 'assets/js/svg-loader.js' %}"></script>
+</body>
+</html>

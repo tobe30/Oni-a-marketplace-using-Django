@@ -1,0 +1,66 @@
+{% extends "include/base.html"%}
+
+{% block content%}
+{% load static %}
+{% load humanize %}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .wallet-card {
+        border-radius: 10px;
+        background: linear-gradient(to right, #4caf50, #66bb6a);
+        color: white;
+    }
+    .checkout-card {
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+    <div class="container buyt ">
+        <div class="row">
+            <!-- Wallet Balance Card (Left) -->
+            <div class="col-md-4">
+                <div class="card wallet-card mb-4">
+                    <div class="card-body text-center">
+                        <h4><i class="bi bi-wallet-fill"></i></h4>
+                        <h4 class="card-title">Wallet Balance</h4>
+                        <h3>₦{{wallet.balance|intcomma}}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checkout Details (Right) -->
+            <div class="col-md-8 mb-5">
+                <div class="card checkout-card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Checkout <i class="bi bi-cart-check-fill"></i></h4>
+                        <form  action="{% url 'core:process_purchase' product.pid %}"  method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="productName" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="productName" value="{{ product.title }}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="productPrice" class="form-label">Product Price</label>
+                                <input type="text" class="form-control" id="productPrice" value="₦{{ product.price|intcomma }}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">Amount to Pay</label>
+                                <input type="text" class="form-control" id="amount" name="amount" value="₦{{ product.price|intcomma }}" readonly>
+                            </div>
+                            <button type="submit" class="btns w-100">Pay with Wallet</button>
+                        </form>
+                        <div class="mt-3 text-center">
+                            <a href="{% url 'core:product-details' product.pid %}" class="btn btn-secondary">Back to Product</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock content %}

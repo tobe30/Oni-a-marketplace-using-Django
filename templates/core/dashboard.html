@@ -1,0 +1,324 @@
+{% extends "include/base.html"%}
+
+{% block content%}
+{% load static %}
+{% load humanize %}
+
+<div class="content-wrapper">
+    <div class="container pb-0">
+        <!-- Profile Detail Area Start-->
+           <div class="video-block section-padding">
+               <div class="main-item">
+                   <div class="row">
+                       <div class="col-md-12 px-0">
+                           <div class="profile-area-dashboard">
+                               <div class="shapes-bg-big"></div>					
+                               <div class="my-dash-profile">
+                                {% if user_profile.image %}
+                                   <img src="{{ user_profile.image.url }}" alt="">
+                                   {% else %}
+
+                                   <img src="{% static 'assets/images/default-pp.png' %}" alt="">
+
+                                   {% endif %}
+                                   
+                               </div>
+                               <div class="profile-dashbd-dt">
+                                   <div class="item-title-dashbd">
+                                       <h4> {{ user_profile.full_name }} </h4>
+                                       <p><span><i class="fas fa-map-marker-alt"></i></span>{{ user_profile.location }} </p>
+                                   </div>																						
+                                   <div class="dashboard-main-dt">
+                                       <ul>
+                                           <li>
+                                               <div class="lisitng-dtl">
+                                                   <ins>{{products.count}}</ins>															
+                                                   <span>Listings</span>															
+                                               </div>
+                                           </li>
+                                           <li>
+                                               <div class="lisitng-dtl">
+                                                   <ins>{{ followers_count }}</ins>															
+                                                   <span>Followers</span>															
+                                               </div>
+                                           </li>
+                                           <li>
+                                               <div class="lisitng-dtl">
+                                                   <ins>{{ following_count }}</ins>															
+                                                   <span>Following</span>															
+                                               </div>
+                                           </li>
+                                       </ul>
+                                   </div>
+                                   <button class="setting-btn" onclick="window.location.href = 'setting.html';">Setting</button>
+                               </div>
+                           </div>										
+                       </div>									
+                   </div>
+                       
+                       <!-- Profile Detail Area End-->
+                       <!--Nav Tabs Start -->
+                       <div class="row">
+                           <div class="dashbd-detail-tabs">
+                               <div class="col-xl-12 col-md-12 col-sm-12 px-0">		
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                      <a class="active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Home</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                      <a  id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">My Ads</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                      <a  id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Profile</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                      <a  id="saved-tab" data-bs-toggle="tab" data-bs-target="#saved-tab-pane" type="button" role="tab" aria-controls="saved-tab-pane" aria-selected="false">Saved</a>
+                                    </li>
+                                  </ul><!--Nav Tabs End -->
+                               
+                                   <!--Tabs Panes Start -->
+                                   <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                                        <div class="video-block section-padding">
+                                            <div class="container">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-sm-12">
+                                                    <div class="publish-lisiting-main">
+                                                        <div class="lisiting-publish-dt">
+                                                            <h4>{{products.count}}</h4>
+                                                            <span>My Ads</span>
+                                                        </div>
+                                                        <i class="bi bi-badge-ad publish-listing"></i>
+															
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-sm-12">
+                                                    <div class="publish-promotion-main">
+                                                        <div class="lisiting-publish-dt">
+                                                            <h4>{{user_profile.saved_products.count}}</h4>
+                                                            <span>Saved ads</span>
+                                                        </div>
+                                                        <i class="bi bi-heart-fill publish-listing"></i>
+														
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-sm-12">
+                                                    <div class="publish-lisiting-main">
+                                                      {% if user_profile.verified == True %}
+                                                        <div class="lisiting-publish-dt">
+                                                            <h4></h4>
+                                                            <span>verified</span>
+                                                          </div>
+                                                        <i class="bi bi-check-circle-fill publish-listing"></i>
+                                                        {% else %}
+                                                        <div class="lisiting-publish-dt">
+                                                          <h4>_</h4>
+                                                          <span>Not verified</span>
+                                                      </div>
+                                                      <i class="bi bi-x-circle publish-listing"></i>
+                                                      {%endif%}
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-sm-12">
+                                                    <div class="publish-promotion-main">
+                                                        <div class="lisiting-publish-dt">
+                                                            <h4>{{total_views}}</h4>
+                                                            <span>Visits This Month</span>
+                                                        </div>
+                                                      <i class="bi bi-eye-fill publish-listing"></i>
+
+                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" class="publish-listing" viewBox="0 0 20 20"> 
+                                                            <path d="M0.833,11.305 L2.910,11.305 C4.026,11.305 5.007,10.590 5.313,9.553 L6.635,5.085 C6.738,4.736 7.115,4.533 7.477,4.633 C7.719,4.700 7.904,4.890 7.956,5.128 L10.414,16.209 C10.686,17.435 11.934,18.215 13.202,17.952 C14.050,17.777 14.730,17.163 14.968,16.357 L16.289,11.889 C16.391,11.544 16.718,11.305 17.090,11.305 L19.167,11.305 C19.627,11.305 20.000,10.945 20.000,10.500 C20.000,10.055 19.627,9.695 19.167,9.695 L17.090,9.695 C15.974,9.695 14.993,10.410 14.687,11.447 L13.365,15.915 C13.296,16.149 13.099,16.327 12.853,16.378 C12.485,16.454 12.122,16.228 12.044,15.872 L9.586,4.791 C9.404,3.971 8.769,3.315 7.935,3.085 C6.688,2.740 5.388,3.438 5.032,4.643 L3.711,9.111 C3.609,9.457 3.282,9.695 2.910,9.695 L0.833,9.695 C0.373,9.695 0.000,10.055 0.000,10.500 C0.000,10.945 0.373,11.305 0.833,11.305 Z"></path>
+                                                        </svg>																	
+                                                    </div>
+                                                </div>													
+                                              
+                                                
+                                            </div>	
+                                        </div>													
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                                        <div class="tab-content">
+                                            <div class="row custom-grid justify-content-center">
+                                              {% for p in products %}
+                                                <div class="col-lg-3 col-md-6 col-6 ">
+                                                    <div class="featured-item">
+                                                        <div class="featured-item-wrapper">
+                                                          <div class="featured-item-content">
+                                                            <form action="{% url 'core:like_product' p.id %}" method="post" class="like-form">
+                                                              {% csrf_token %}
+                                                              <div class="fav-counter {% if p.id in liked_products %}liked{% endif %}" data-product-id="{{ p.id }}">
+                                                                <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+                                                                  <i class="bi bi-heart"></i>
+                                                                </button>
+                                                                <span class="count">{{ p.likes }}</span>
+                                                              </div>
+                                                            </form>
+                                                            
+                                                                
+                                                                <div class="featured-item-image">
+                                                                    <a href="{% url 'core:product-details' p.pid %}"><img src="{{p.image.url}}" width="304" height="340" alt="" loading="lazy"></a>
+                                                                  </div>
+                                                                
+                                                            
+                                                          
+                                                                  <div class="featured-item-info">
+                                                                    <div class="title"><a href="{% url 'core:product-details' p.pid %}">{{p.title}}</a></div>
+                                                                    <div class="item-meta">
+                                                                     
+                                                                      <a href="" style="color: red;">manage</a>
+                                                                    </div>
+                                                                    <div class="featured-bidding-section">
+                                                                      <div class="featured-item-pricebox">
+                                                                        <div class="price">₦{{ p.price|intcomma }}</div>
+                                                                      </div>
+                                                                      {% if p.product_status == 'published' %}
+                                                                      <div class="place-bid"><button class="btn btn-small-wide btn-success mt-2">Published</button></div>
+                                                                      {%endif%}
+                                                                      {% if p.product_status == 'in_review' %}
+                                                                      <div class="place-bid"><button class="btn btn-small-wide btn-info mt-2">In review</button></div>
+                                                                      {%endif%}
+
+                                                                      {% if p.product_status == 'rejected' %}
+                                                                      <div class="place-bid"><button class="btn btn-small-wide btn-danger mt-2">Rejected</button></div>
+                                                                      {%endif%}
+                                                                      
+                                                                    </div>
+                                                                  </div>
+                                                          </div>
+                                                         
+                                                        </div>
+                                                      </div>
+                                                </div>
+                                                {% empty %}
+                                                <center><p>No product to show</p></center>
+                                                {% endfor %}
+                                              
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+                                        <div class="row lr-row">
+														<div class="col-md-6">
+															<div class=" locatins">
+																<div class="heading">
+															<i class="bi bi-justif"> <h3>About</h3></i>	
+																</div>
+																<div class="sub-heading">
+                                  {{ user_profile.bio }}
+																</div>
+																<div class="clearfix"></div>
+															</div>
+
+															
+															<div class="locatins heading">
+																<div class="heading">
+																	<img src="{% static 'images/svg/location.svg' %}" alt=""><h3>Address</h3>
+																</div>
+																<div class="sub-heading">{{ user_profile.location }}</div>
+																<div class="clearfix"></div>
+															</div>
+
+                                                            <a href="{% url 'userauths:edit-profile'%}"><button class="btn btn-danger mt-3">Edit Profile</button></a>
+														</div>
+														<div class="col-md-6">
+																														
+															<div class="box-left">
+																<div class="rightboxs">
+																	<div class="heading">
+																		<h3>Phone Number</h3>
+																	</div>
+																	<p><a href="#">+{{ user_profile.phone }}</a></p>
+																</div>
+															</div>
+															<div class="box-left">
+																<div class="rightboxs">
+																	<div class="heading">
+																		<h3>Social media</h3>
+																	</div>
+																	<p><a href="#">{{ user_profile.facebook }}</a></p>
+																	<p><a href="#">{{ user_profile.whatsapp }}</a></p>
+																	<p><a href="#">{{ user_profile.instagram }}</a></p>
+
+																</div>
+															</div>
+															
+																												
+														</div>
+													</div>
+                                    </div>
+                                    <div class="tab-pane fade" id="saved-tab-pane" role="tabpanel" aria-labelledby="saved-tab" tabindex="0">
+                                        <div class="tab-content">
+                                            <div class="row custom-grid justify-content-center">
+                                              {% for p in saved%}
+                                                <div class="col-lg-3 col-md-6 col-6">
+                                                    <div class="featured-item">
+                                                        <div class="featured-item-wrapper">
+                                                          <div class="featured-item-content">
+                                                            <form action="{% url 'core:like_product' p.id %}" method="post" class="like-form">
+                                                              {% csrf_token %}
+                                                              <div class="fav-counter {% if p.id in liked_products %}liked{% endif %}" data-product-id="{{ p.id }}">
+                                                                <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+                                                                  <i class="bi bi-heart"></i>
+                                                                </button>
+                                                                <span class="count">{{ p.likes }}</span>
+                                                              </div>
+                                                            </form>
+                                                            
+                                                                
+                                                                <div class="featured-item-image">
+                                                                    <a href="{% url 'core:product-details' p.pid %}"><img src="{{p.image.url}}" width="304" height="340" alt="" loading="lazy"></a>
+                                                                  </div>
+                                                                
+                                                            
+                                                          
+                                                            <div class="featured-item-info">
+                                                              <div class="title"><a href="{% url 'core:product-details' p.pid %}">{{p.title}}</a></div>
+                                                              <div class="item-meta">
+                                                                <span class="avatar box-26">
+                                                                  <a href="08-profile-page.html">
+                                                                  
+                                                              <source type="image/avif" srcset="avif/avatar.avif" />
+                                                              <img src="{{ p.user.profile.image.url }}" alt="avatar" loading="lazy" width="100" height="100">
+                                                          
+                                                                  </a>
+                                                                  <span class="verified"><svg class="crumina-icon"><use xlink:href="#check-icon"></use></svg></span>
+                                                                </span>
+                                                                @{{ p.user.profile.user }}
+                                                              </div>
+                                                              <div class="featured-bidding-section">
+                                                                <div class="featured-item-pricebox">
+                                                                  <div class="price">₦{{ p.price|intcomma }}</div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                      
+                                                        </div>
+                                                      </div>
+                                                </div>
+                                                {% empty %}
+                                                <center><p style="color: red;" >No saved item found</p></center>
+                                                {% endfor%}
+                                               
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                  </div>
+                                   <!--Tabs Panes End -->
+                               </div>			
+                           </div>
+                       </div>
+                       <!--Tab Links End-->		
+                   </div>
+               </div>
+           </div>
+        </div>
+
+{% endblock content %}
+
+        

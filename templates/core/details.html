@@ -1,0 +1,485 @@
+{% extends "include/base.html"%}
+
+{% block content%}
+{% load static %}
+{% load humanize %}
+
+    <style>
+        .magnifying-glass {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .main-image:hover .magnifying-glass {
+            display: block;
+        }
+        .carousel-thumbnails {
+            display: flex;
+            overflow: hidden;
+            margin-top: 10px;
+            position: relative;
+        }
+        .carousel-thumbnails img {
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .carousel-thumbnails a {
+            display: inline-block;
+        }
+        .carousel-thumbnails-wrapper {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .carousel-control-prev, .carousel-control-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .carousel-control-prev {
+            left: 0;
+        }
+        .carousel-control-next {
+            right: 0;
+        }
+     /* Default heart icon (unliked) */
+.pd-detail__like .bi-heart {
+    background-color: transparent; /* No background when unliked */
+    color: grey; /* Grey heart color for unliked */
+    padding: 1px;
+    border-radius: 50%; /* Makes the icon circular */
+    font-size: 15px; /* Adjust icon size */
+}
+
+/* Liked state: background turns green, icon becomes white */
+.pd-detail__like.liked .bi-heart-fill {
+    color: green; /* White heart icon */
+    padding: 1px;
+    border-radius: 50%;
+    font-size: 15px;
+}
+
+
+
+    </style>
+
+    <div class="container mt-5">
+        <div class="row vehicle-description">
+            <div class="col-md-6">
+                <div class="main-image position-relative">
+                    <a href="{{ p.image.url }}" data-lightbox="car-images">
+                        <img src="{{ p.image.url }}" class="img-fluid" alt="Full Picture">
+                        <span class="magnifying-glass">{{p.title}}</span>
+                    </a>
+                </div>
+                
+                <div class="carousel-thumbnails mt-3">
+                    <div class="carousel-control-prev" id="prev-btn">&lt;</div>
+                    <div class="carousel-thumbnails-wrapper" id="thumbnails-wrapper">
+                        {% for p in p_image %}
+                        <a href="{{ p.images.url }}" data-lightbox="car-images">
+                            <img src="{{ p.images.url }}" alt="Thumb Car">
+                        </a>
+                     {% endfor %}
+                    </div>
+                    <div class="carousel-control-next" id="next-btn">&gt;</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="pd-detail">
+                    <div>
+
+                        <span class="pd-detail__name">{{p.title}}</span></div>
+                    <div>
+                        <div class="pd-detail__inline">
+
+                            <span class="pd-detail__price">₦{{p.price|intcomma}}</span>
+
+                    </div>
+                    <div class="u-s-m-b-15">
+                            <div class="item-meta mt-1 mb-2">
+                                <span class="avatar box-26">
+                                    <a href="08-profile-page.html">
+                                      <img src="{{profile.image.url}}" height="52" width="52" alt=""  loading="lazy">
+                                    </a>
+                                    <span class="verified"><svg class="crumina-icon"><use xlink:href="#check-icon"></use></svg></span>
+                                  </span>
+                                @{{p.user}}
+                              </div>
+                              
+                              {% if request.user.is_authenticated %}
+                              <form action="{% url 'core:like_product' p.id %}" method="post" class="like-form">
+                                  {% csrf_token %}
+                            <span class="pd-detail__review u-s-m-l-4">
+                                <div class="pd-detail__like {% if p.id in liked_products %}liked{% endif %}" data-product-id="{{ p.id }}">
+                                <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+                                    <i class="pd-detail__like bi {% if p.id in liked_products %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                            </button>
+                            <span class="count">{{ p.likes }}</span>
+                                </div>
+                            </span>
+                        </form>
+                        {% else %}
+
+                       <a href="{% url 'userauths:sign-in' %}">
+                      <span class="pd-detail__review u-s-m-l-4">
+                          <div class="pd-detail__like {% if p.id in liked_products %}liked{% endif %}" data-product-id="{{ p.id }}">
+                          <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+                              <i class="pd-detail__like bi {% if p.id in liked_products %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                      </button>
+                      <span class="count">{{ p.likes }}</span>
+                          </div>
+                      </span>
+                    </a>
+
+
+                        {%endif%}
+                            </div>
+                    </div>
+                    {% if request.user == p.user%}
+                    <div class="u-s-m-b-15">
+                        <div class="pd-detail__inline">
+
+                            <a href="{% url 'items:edit_prod' p.pid %}"> <span class="pd-detail__stock">Edit</span></a>
+
+                            <a href="">
+                            <span class="pd-detail__left">Delete</span></div>
+                        </a>
+                    </div>
+
+                    {% else %}
+                    <div class="u-s-m-b-15">
+                        <div class="pd-detail__inline">
+
+                            <a href="{% url 'core:purchase' p.pid %}"> <span class="pd-detail__stock"> Buy</span></a>
+
+                            <a href="{% url 'chat:chat_view' p.id %}">
+                            <span class="pd-detail__left">Start Chat</span></div>
+                        </a>
+                    </div>
+                    {% endif %}
+                   
+
+                       
+                        
+                    <div class="u-s-m-b-15 mt-2">
+                        <div class="pd-detail__inline">
+                            <form action="{% url 'items:saved' p.id %}" method="POST" class="save-form">
+                                {% csrf_token %}
+                                <button type="submit" class="pd-detail__click-wrap">
+                                    {% if p in request.user.profile.saved_products.all %}
+                                        <span class="pd-detail__click-wrap">
+                                            <i class="bi bi-bookmark-fill u-s-m-r-6"></i>
+                                            <span class="pd-detail__click-count">Saved</span>
+                                        </span>
+                                    {% else %}
+                                        <i class="bi bi-bookmark u-s-m-r-6"></i> <!-- Outline bookmark icon for not saved -->
+                                        <span class="pd-detail__click-count">Save</span>
+                                    {% endif %}
+                                </button>
+                            </form>
+                            
+                                 </div>
+                    </div>
+                    <div class="u-s-m-b-15">
+                        <div class="pd-detail__inline">
+
+                            <span class="pd-detail__click-wrap"><i class="bi bi-eye u-s-m-r-6"></i>
+                                
+                                <span class="pd-detail__click-count">{{ p.views }}</span></span></div>
+                    </div>
+                    <div class="u-s-m-b-15 mt-2">
+                        <ul class="pd-social-list"> 
+                            {% if profile.facebook %}
+                            <li>
+                                <a class="s-fb--color-hover" href="{{ profile.facebook }}"><i class="bi bi-facebook"></i></a></li>
+                            {%endif%}
+
+                            {% if profile.instagram %}
+                            <li>
+
+                                <a class="s-insta--color-hover" href="https://www.instagram.com/{{ profile.instagram }}"><i class="bi bi-instagram"></i></a></li>
+                                {%endif%}
+                                {% if profile.whatsapp %}
+                            <li>
+
+                                <a class="s-wa--color-hover" href="#"><i class="bi bi-whatsapp"></i></a></li>
+                                {%endif%}
+                        </ul>
+                    </div>
+                  
+                    <div class="u-s-m-b-15 mt-2">
+
+                        <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                        <ul class="pd-detail__policy-list">
+                            <li><i class="bi bi-check-circle-fill u-s-m-r-8"></i>
+
+                                <span>Buyer Protection.</span></li>
+                            <li><i class="bi bi-check-circle-fill"></i>
+
+                                <span>Full Refund if you don't receive your order.</span></li>
+                            <li><i class="bi bi-check-circle-fill u-s-m-r-8"></i>
+
+                                <span>Returns accepted if product not as described.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      
+       
+        <div class="row mt-3">
+            <div class="dashbd-detail-tabs">
+                <div class="col-xl-12 col-md-12 col-sm-12 px-0">		
+                 <ul class="nav nav-tabs" id="myTab" role="tablist">
+                     <li class="nav-item" role="presentation">
+                       <a class="active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Description</a>
+                     </li>
+                     <li class="nav-item" role="presentation">
+                       <a  id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">My Tags</a>
+                     </li>
+                     <li class="nav-item" role="presentation">
+                       <a  id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Feedback</a>
+                     </li>
+                   </ul><!--Nav Tabs End -->
+
+                   <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                        <div class="pd-tab__desc">
+                            <div class="u-s-m-b-15">
+                                <p>{{p.description}}</p>
+                            </div>
+                            {% if p.youtube_url %}
+                            <div class="ratio ratio-16x9">
+                                <iframe src="https://www.youtube.com/embed/{{ p.youtube_url|slice:'-11:' }}" allowfullscreen></iframe>
+                            </div>
+                        {% endif %}
+                            
+                           
+                            <div class="mb-3">
+                                <h4>PRODUCT INFORMATION</h4>
+                            </div>
+                            <div class="mb-3">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            {% if p.category.title == "cars" %}
+                                            <tr>
+                                                <td>Condition</td>
+                                                <td>{{ p.condition }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Color</td>
+                                                <td>{{p.color}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Location</td>
+                                                <td>{{ p.location }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Warranty</td>
+                                                <td>{{p.warranty}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Numbers of door</td>
+                                                <td>{{p.number_of_doors}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Number of seats</td>
+                                                <td>{{p.number_of_seats}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Engine Size</td>
+                                                <td>{{p.engine_size}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Fuel type</td>
+                                                <td>{{p.fuel_type}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Transmission</td>
+                                                <td>{{p.transmission}}</td>
+                                            </tr>
+                                           
+                                            {%endif%}
+                                            {% if product.category.title == "houses" %}
+
+                                            <tr>
+                                                <td>Location</td>
+                                                <td>{{ product.location }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Size (sq. ft.)</td>
+                                                <td>{{ product.size }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Number of Rooms</td>
+                                                <td>{{ product.num_rooms }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Price</td>
+                                                <td>{{ product.price }}</td>
+                                            </tr>
+                                          {%endif%}
+                                            {% if product.category.title == "clothes" %}
+
+                                            <tr>
+                                                <td>Top Fit</td>
+                                                <td>{{ product.top_fit }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Print</td>
+                                                <td>{{ product.print_type }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Neck</td>
+                                                <td>{{ product.neck_type }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pieces Count</td>
+                                                <td>{{ product.pieces_count }}</td>
+                                            </tr>
+                                            {%endif%}
+                                           
+
+                    {% if p.category.title == "phones" %}
+                    <!-- Fields for Phones -->
+                    <tr>
+                        <td>Condition</td>
+                        <td>{{ p.condition }} mAh</td>
+                    </tr>
+                    <tr>
+                        <td>Brand</td>
+                        <td>{{ p.brand }}</td>
+                    </tr>
+                    <tr>
+                        <td>Storage</td>
+                        <td>{{ p.storage_capacity }} GB</td>
+                    </tr>
+                    <tr>
+                        <td>Camera</td>
+                        <td>{{ p.camera_quality }} MP</td>
+                    </tr>
+                    <tr>
+                        <td>Battery</td>
+                        <td>{{ p.battery_life }} mAh</td>
+                    </tr>
+                  {%endif%}
+                    {% if p.category.title == "gadget" %}
+                    <!-- Fields for Electronics -->
+                    <tr>
+                        <td>Brand</td>
+                        <td>{{ p.brand }}</td>
+                    </tr>
+                    <tr>
+                        <td>Model</td>
+                        <td>{{ p.model }}</td>
+                    </tr>
+                    <tr>
+                        <td>Warranty</td>
+                        <td>{{ p.warranty }} years</td>
+                    </tr>
+                    <tr>
+                        <td>Price</td>
+                        <td>{{ p.price }}</td>
+                    </tr>
+                    {%endif%}
+                 
+                
+                    <!-- Default fields for other categories -->
+                    
+                                          
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% if p.category.title == "cars" %}
+
+                            <p>yes</p>
+
+                            {% else %}
+                            <p>error</p>
+                            {% endif %}
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                        <div class="pd-tab__tag">
+                            <h2 class="u-s-m-b-15">All TAGS</h2>
+                            <div class="u-s-m-b-15">
+                               
+                            </div>
+
+                            <span class="gl-text">{% for tag in p.tags.all %}<a href="{% url 'core:tags' tag.slug %}" rel="tag"> #{{tag.name}}</a>,{% empty %} No Tags found{% endfor %}</span>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+                        <div class="pd-tab__rev">
+                            <div class="u-s-m-b-30">
+
+                            </div>
+                            <div class="mb-4">
+             {% if request.user.is_authenticated %}
+            {% if make_review %}
+        <div class="mb-3">
+            <h2>{{comments.count}} Comments</h2>
+        </div>
+        <form method="POST">
+        <div class="mb-4">
+            {% csrf_token %}
+            <label class="form-label" for="reviewer-text">YOUR REVIEW *</label>
+            {{ comments_form.review }}
+            <button type="submit" class="btn btn-fuchsia">Save Changes</button>
+        </div>
+        </form>
+        {% endif %}
+        {% endif %}
+
+        <h4>{{comments.count}} Comments</h4>
+        {% for c in comments %}
+
+        <div class="reviews">
+            <div class="review-o mb-4">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="review-o__name">{{c.user}}</span>
+                    <span class="review-o__date">{{ c.date|date:"l, F j, Y" }}</span>
+                </div>
+
+                <p class="review-o__text">{{c.review}}</p>
+            </div>
+
+        </div>
+        {% endfor%}
+</div>
+
+                        
+                        </div>
+                    </div>
+                   </div>
+    </div>
+            </div>
+            </div>
+        </div>
+    
+  
+   
+{% endblock content %}

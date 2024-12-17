@@ -1,0 +1,617 @@
+{% extends "include/base.html"%}
+
+{% block content%}
+{% load static %}
+
+    <style>
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .image-preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <img src="{% static 'assets/images/onitsha.png' %}" alt="">
+           
+          </a>
+        </div><!-- End Logo -->
+    
+        <div class="search-bar">
+          <form class="search-form d-flex align-items-center" method="POST" action="#">
+            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+          </form>
+        </div><!-- End Search Bar -->
+    
+        <nav class="header-nav ms-auto">
+          <ul class="d-flex align-items-center">
+    
+            <li class="nav-item d-block d-lg-none">
+              <a class="nav-link nav-icon search-bar-toggle " href="#">
+                <i class="bi bi-search"></i>
+              </a>
+            </li><!-- End Search Icon-->
+    
+            <li class="nav-item dropdown">
+    
+              <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                <i class="bi bi-bell"></i>
+                <span class="badge bg-success badge-number">4</span>
+              </a><!-- End Notification Icon -->
+    
+    
+            </li><!-- End Notification Nav -->
+    
+            <li class="nav-item">
+    
+              <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                <i class="bi bi-chat-left-text"></i>
+                <span class="badge bg-success badge-number">3</span>
+              </a><!-- End Messages Icon -->
+    
+    
+            </li><!-- End Messages Nav -->
+    
+            <li class="nav-item dropdown pe-3">
+    
+              <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                <img src="{% static 'assets/images/user-1.png' %}" alt="Profile" class="rounded-circle">
+                <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+              </a><!-- End Profile Iamge Icon -->
+    
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                <li class="dropdown-header">
+                  <h6>Kevin Anderson</h6>
+                  <span>Web Designer</span>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+    
+                <li>
+                  <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                    <i class="bi bi-person"></i>
+                    <span>My Profile</span>
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+    
+                <li>
+                  <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                    <i class="bi bi-gear"></i>
+                    <span>Account Settings</span>
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+    
+                <li>
+                  <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                    <i class="bi bi-question-circle"></i>
+                    <span>Need Help?</span>
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+    
+                <li>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Sign Out</span>
+                  </a>
+                </li>
+    
+              </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+    
+          </ul>
+        </nav><!-- End Icons Navigation -->
+    
+      </header><!-- End Header -->
+      
+    <section class="adpost-part">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <form class="adpost-form">
+                        <div class="adpost-card">
+                            <div class="adpost-title">
+                                <h3>Post Ad</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Product Title</label>
+                                        {{form.title}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">product Description</label>
+                                        {{form.description}}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Youtube Link</label>
+                                        {{form.link}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Product Category</label>
+                                        {{form.category}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Price</label>
+                                        {{form.price}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Year</label>
+                                        {{form.year}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Conditon</label>
+                                        <select class="form-control custom-select" required>
+                                            <option value="" disabled selected>Select Condition</option>
+                                            <option value="new">New</option>
+                                            <option value="used">Used</option>
+                                            <option value="refurbished">Refurbished</option>
+                                            <option value="old">Old</option>
+                                            <option value="renovated">Renovated</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Size</label>
+                                        {{form.size}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Location</label>
+                                        {{form.location}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Warranty</label>
+                                        {{form.warranty}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Color</label>
+                                        {{form.color}}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Ad Features</label>
+                                        {{form.features}}
+                                    </div>
+                                </div>
+                                <!-- Vehicle-Specific Fields -->
+                                {% for category in categories %}
+                                {% if category.cid == 'cat-1' %}
+                                <div id="cat-1Fields" class="d-none">
+                                    <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="mileage" class="form-label">Mileage</label>
+                                        {{form.mileage}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="transmission" class="form-label">Transmission</label>
+                                        {{form.transmission}}
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="fuel_type" class="form-label">Fuel Type</label>
+                                        {{form.fuel_type}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="engine_size" class="form-label">Engine Size</label>
+                                        {{form.engine_size}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="number_of_doors" class="form-label">Number of Doors</label>
+                                        {{form.number_of_doors}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="number_of_seats" class="form-label">Number of Seats</label>
+                                        {{form.number_of_seats}}
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+
+                                 <!-- Real Estate-Specific Fields -->
+                    <div id="cat2c2Fields" class="d-none">
+                        <div class="row">
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                    <label for="property_type" class="form-label">Property Type</label>
+                    {{form.property_type}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="bedrooms" class="form-label">Bedrooms</label>
+                    {{form.bedrooms}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="bathrooms" class="form-label">Bathrooms</label>
+                    {{form.bathrooms}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="square_feet" class="form-label">Square Feet</label>
+                    {{form.square_feet}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="lot_size" class="form-label">Lot Size</label>
+                    {{form.lot_size}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="year_built" class="form-label">Year Built</label>
+                    {{form.year_built}}
+                    </div>
+                </div>
+                </div>
+                    </div>
+
+                    <!-- Electronics-Specific Fields -->
+                    <div id="cat121Fields" class="d-none">
+                <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="screen_size" class="form-label">Screen Size</label>
+                    {{form.year_built}}
+                        </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="battery_life" class="form-label">Battery Life</label>
+                    {{form.battery_life}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="storage_capacity" class="form-label">Storage Capacity</label>
+                    {{form.storage_capacity}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="ram" class="form-label">RAM</label>
+                    {{form.ram}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="processor" class="form-label">Processor</label>
+                    {{form.processor}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="camera_quality" class="form-label">Camera Quality</label>
+                    {{form.camera_quality}}
+                    </div>
+                </div>
+                </div>
+                        </div>
+
+                     <!-- Furniture-Specific Fields -->
+            <div id="cat2cc2Fields" class="d-none">
+                <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label for="material" class="form-label">Material</label>
+                    {{form.material}}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label for="dimensions" class="form-label">Dimensions</label>
+                    {{form.dimensions}}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label for="weight" class="form-label">Weight</label>
+                    {{form.weight}}
+                    </div>
+                </div>
+                </div>
+                </div>
+
+                   <!-- Clothes-Specific Fields -->
+                 <div id="cat111Fields" class="d-none">
+                <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="clothing_size" class="form-label">Clothing Size</label>
+                    {{form.clothing_size}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="fabric_type" class="form-label">Fabric Type</label>
+                    {{form.fabric_type}}
+                    </div>
+                </div>
+                </div>
+                    </div>
+
+                    <!-- Toy-Specific Fields -->
+            <div id="catt122Fields" class="d-none">
+                <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="age_group" class="form-label">Age Group</label>
+                    {{form.age_group}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="safety_standards" class="form-label">Safety Standards</label>
+                    {{form.safety_standards}}
+                    </div>
+                </div>
+            </div>
+            </div>
+
+                              
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">ad tag</label>
+                                        
+                                        <textarea class="form-control" placeholder="Maximum of 15 keywords"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label for="">Add Image</label>
+                                    <div class="image-box mb-5" id="imageBox1">
+                                        <img id="image1" src="{% static 'assets/images/dp-m1.jpg' %}" style="width: 150px;" alt="Image 1">
+                                      </div>
+                                      <div class="custom-file ">
+                                          <label for="imageInput1" class="btn">Choose image</label>
+                                          <input type="file" class="custom-file-input" id="imageInput1" onchange="displayImage('imageInput1', 'image1')">
+                                      </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <p style="margin-bottom: -1px;">Add more images for this category at least 5 <br> <span style="color: red;"> jpg, png & jpeg</span></p><br>
+                                <div class="custom-file">
+                                    <label for="images" class="btn">Choose image</label>
+                                     {{form.images}}
+                            </div>
+                            </div>
+
+                            <div id="imagePreview" class="image-preview"></div>
+
+                            <!-- Alert for Duplicate Images -->
+                            <div id="duplicateAlert" class="alert alert-warning" role="alert">
+                                You can't upload this image twice.
+                            </div>
+                
+                            <!-- Alert for Invalid File Type -->
+                            <div id="invalidFileAlert" class="alert alert-danger" role="alert">
+                                Only JPG, JPEG, and PNG files are allowed.
+                            </div>
+                            <div class="col-md-6">
+                            <button type="submit" class="">Post Add</button>
+                        </div>
+                            </div>
+                        </div>
+                        <div class="adpost-card">
+                            <div class="adpost-title">
+                                <h3>Author Information</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" placeholder="Your Name">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" placeholder="Your Email">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Number</label>
+                                        <input type="number" class="form-control" placeholder="Your Number">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Address</label>
+                                        <input type="text" class="form-control" placeholder="Your Address">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-4">
+                    <div class="account-card  fade show">
+                        <div class="account-title">
+                            <h3>Safety Tips</h3>
+                            <button data-dismiss="alert">close</button>
+                        </div>
+                        <ul class="account-card-text">
+                            <li>
+                                <p>Posting an ad on Carspot is free! However, all ads must follow our rules:</p>
+                            </li>
+                            <li>
+                                <p>Make sure you post in the correct category.</p>
+                            </li>
+                            <li>
+                                <p>Do not post the same ad more than once or repost an ad within 48 hours.</p>
+                            </li>
+                            <li>
+                                <p>Do not put your email or phone numbers in the title or description.</p>
+                            </li>
+                            <li>
+                                <p>jjj</p>
+                            </li>
+                        </ul>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const categorySelect = document.getElementById('category');  // Django renders this ID
+    
+            const fieldMappings = {
+                {% for category in categories %}
+                    {{ forloop.counter }}: '{{ category.cid }}Fields',
+                {% endfor %}
+            };
+    
+            console.log(fieldMappings);  // For debugging
+    
+            if (!categorySelect) {
+                console.error('Category select element not found');
+                return;
+            }
+    
+            categorySelect.addEventListener('change', function () {
+                const selectedIndex = this.selectedIndex;
+    
+                // Hide all fields initially
+                Object.values(fieldMappings).forEach(fieldId => {
+                    const fieldElement = document.getElementById(fieldId);
+                    if (fieldElement) {
+                        fieldElement.classList.add('d-none');
+                    }
+                });
+    
+                // Show the relevant fields based on the selected index
+                if (fieldMappings[selectedIndex]) {
+                    const relevantField = document.getElementById(fieldMappings[selectedIndex]);
+                    if (relevantField) {
+                        relevantField.classList.remove('d-none');
+                    } else {
+                        console.error(`Field mapping for category ${selectedIndex} not found`);
+                    }
+                }
+            });
+        });
+    </script>
+    
+    
+    
+    
+    
+
+    <script>
+    
+        function displayImage(inputId, imageId) {
+            var input = document.getElementById(inputId);
+            var image = document.getElementById(imageId);
+            if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function(e) {
+                image.src = e.target.result;
+              };
+              reader.readAsDataURL(input.files[0]);
+            }
+          }
+    </script>
+
+    <script>
+        const imagesInput = document.getElementById('images');
+        const imagePreview = document.getElementById('imagePreview');
+        const duplicateAlert = document.getElementById('duplicateAlert');
+        const invalidFileAlert = document.getElementById('invalidFileAlert');
+        const selectedFiles = new Set(); // To keep track of unique files
+
+        imagesInput.addEventListener('change', function () {
+            const files = Array.from(this.files);
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+            files.forEach(file => {
+                if (!allowedTypes.includes(file.type)) {
+                    invalidFileAlert.style.display = 'block';
+                    setTimeout(() => {
+                        invalidFileAlert.style.display = 'none';
+                    }, 3000); // Hide alert after 3 seconds
+                } else if (selectedFiles.has(file.name)) {
+                    duplicateAlert.style.display = 'block';
+                    setTimeout(() => {
+                        duplicateAlert.style.display = 'none';
+                    }, 3000); // Hide alert after 3 seconds
+                } else {
+                    selectedFiles.add(file.name);
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        imagePreview.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+
+    {% endblock content %}

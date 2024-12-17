@@ -1,0 +1,425 @@
+{% extends "include/base.html"%}
+
+{% block content%}
+{% load static %}
+{% load humanize %}
+
+<section id="hero-slider" class="hero-slider">
+  <div class="container-md" data-aos="fade-in">
+    <div class="row">
+      <div class="col-12">
+        <div class="swiper sliderFeaturedPosts">
+          <div class="swiper-wrapper w-100">
+            <div class="swiper-slide">
+              <a href="#" class="img-bg d-flex align-items-end" style="background-image: url({% static 'assets/images/onitsha-banner3.jpg' %})">
+                <div class="img-bg-inner">
+                  <h2>The Best Homemade Masks for Face (keep the Pimples Away)</h2>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem atque.</p>
+                </div>
+              </a>
+            </div>
+
+            <div class="swiper-slide">
+              <a href="#" class="img-bg d-flex align-items-end" style="background-image: url({% static 'assets/images/onitsha-banner4.jpg' %})">
+                <div class="img-bg-inner">
+                  <h2></h2>
+                  <p></p>
+                </div>
+              </a>
+            </div>
+
+            <div class="swiper-slide">
+              <a href="#" class="img-bg d-flex align-items-end" style="background-image: url({% static 'assets/images/onitsha-banner2.jpg' %})">
+                <div class="img-bg-inner">
+                  <h2></h2>
+                  <p></p>
+                </div>
+              </a>
+            </div>
+
+            <div class="swiper-slide">
+              <a href="#" class="img-bg d-flex align-items-end" style="background-image: url({% static 'assets/images/onitsha-banner5.jpg' %})">
+                <div class="img-bg-inner">
+                  <h2>9 Half-up/half-down Hairstyles for Long and Medium Hair</h2>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem atque.</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="custom-swiper-button-next">
+            <span class="bi-chevron-right"></span>
+          </div>
+          <div class="custom-swiper-button-prev">
+            <span class="bi-chevron-left"></span>
+          </div>
+
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- End Hero Slider Section -->
+
+
+<div class="trending-area pt-50 pb-70">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-md-6">
+<div class="section-title">
+  <div class="section-title"><span class="gradient-text">Trending</span> Products</div>
+</div>
+</div>
+</div>
+<div class="trending-slider owl-carousel owl-theme pt-45">
+  {% for p in trending_products %}
+<div class="featured-item">
+  <div class="featured-item-wrapper">
+    <div class="featured-item-content">
+      {% if request.user.is_autheticated %}
+      <form action="{% url 'core:like_product' p.id %}" method="post"  class="like-form">
+        {% csrf_token %}
+        <div class="fav-counter  {% if p.id in liked_products %}liked{% endif %}"  data-product-id="{{ p.id }}">
+          <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+            <i class="bi bi-heart"></i>
+          </button>
+          <span class="count">{{ p.likes }}</span>
+        </div>
+      </form>
+      {% else %}
+
+      <a href="{% url 'userauths:sign-in' %}">
+      
+        <div class="fav-counter  {% if p.id in liked_products %}liked{% endif %}"  data-product-id="{{ p.id }}">
+          <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+            <i class="bi bi-heart"></i>
+          </button>
+          <span class="count">{{ p.likes }}</span>
+        </div>
+     
+    </a>
+      {% endif %}
+          
+          <div class="featured-item-image">
+              <a href="{% url 'core:product-details' p.pid %}"><img src="{{p.image.url}}" width="304" height="340" alt="" loading="lazy"></a>
+            </div>
+          
+      
+    
+            <div class="featured-item-info">
+              <div class="title"><a href="{% url 'core:product-details' p.pid %}">{{p.title}}</a></div>
+              <div class="item-meta">
+                <span class="avatar box-26">
+                    <a href="{% url 'core:seller_profile' p.user.username %}">
+                      <img src="{{ p.user.profile.image.url }}" height="52" width="52" alt=""  loading="lazy">
+                    </a>
+                    {% if p.user.profile.verified == True %}
+                    <span class="verified"><svg class="crumina-icon"><use xlink:href="#check-icon"></use></svg></span>
+                    {% else %}
+
+                    {%endif%}
+                  </span>
+                  {{ p.user.profile.user }}
+              </div>
+              <div class="featured-bidding-section">
+                <div class="featured-item-pricebox">
+                  <div class="price">₦{{p.price|intcomma}}</div>
+                </div>
+              </div>
+            </div>
+    </div>
+
+  </div>
+</div>
+{% empty %}
+<center> <h3 style="color: red;">No products found.</h3> </center>
+{% endfor %}
+
+</div>
+</div>
+</div>
+
+<div class="top-sellers-area pb-70">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-8 col-md-6">
+              <div class="section-title">
+                  <span class="gradient-text">Top</span> Sellers
+              </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+              <div class="trending-btn text-end">
+                  <a href="{% url 'core:sellers'%}" class="default-btn border-radius-5">Explore More</a>
+              </div>
+          </div>
+      </div>
+      <div class="row justify-content-center">
+          {% for seller in top_sellers %}
+          <div class="col-lg-6 col-md-4">
+              <div class="top-creator-item mb-3">
+                  <div class="creator-number">{{ forloop.counter|add:0 }}</div>
+                  <div class="creator-box">
+                      <div class="avatar box-64">
+                          <a href="{% url 'core:seller_profile' seller.user.username %}">
+                              <img src="{{ seller.user.profile.image.url }}" alt="avatar" loading="lazy" width="100" height="100">
+                              {% if seller.user.profile.verified == True %}
+                              <span class="verified">
+                                  <svg class="crumina-icon">
+                                      <use xlink:href="#check-icon"></use>
+                                  </svg>
+                              </span>
+                              {%else%}
+
+                              {%endif%}
+                          </a>
+                      </div>
+                      <div class="creator-meta">
+                          <div class="title"><a href="{% url 'core:seller_profile' seller.user.username %}">{{ seller.user.username }}</a></div>
+                          <div class="creator-meta">@{{ seller.user.username }}</div>
+                      </div>
+                  </div>
+                  <div class="projects-score">
+                      <div class="number title">{{ seller.user.product_set.count }}</div>
+                      <div class="label">Created</div>
+                  </div>
+                  <div class="projects-previews mt-2 d-flex justify-content-center">
+                      {% for product in seller.user.product_set.all|slice:":3" %}
+                      <div class="preview-box box-68">
+                          <a href="{% url 'core:product-details' product.pid %}">
+                              <img src="{{ product.image.url }}" alt="" loading="lazy">
+                          </a>
+                      </div>
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
+</div>
+
+
+
+<div class="auctions-area-two pb-100">
+<div class="container">
+<div class="row align-items-center">
+<div class="col-lg-8 col-md-6">
+<div class="section-title">
+  <div class="section-title"><span class="gradient-text">Newest</span> Items</div>
+</div>
+</div>
+<div class="col-lg-4 col-md-6">
+<div class="auction-btn text-end">
+<a href="{% url 'core:products' %}" class="default-btn border-radius-5">Explore More</a>
+</div>
+</div>
+</div>
+<div class="tab_content current active">
+  <div class="tabs_item current">
+  <div class="row custom-grid justify-content-center">
+    {% for p in product%}
+  <div class="col-lg-3 col-md-6 col-6 ">
+      <div class="featured-item">
+          <div class="featured-item-wrapper">
+            <div class="featured-item-content">
+              {% if request.user.is_autheticated %}
+              <form action="{% url 'core:like_product' p.id %}" method="post"  class="like-form">
+                {% csrf_token %}
+                <div class="fav-counter  {% if p.id in liked_products %}liked{% endif %}"  data-product-id="{{ p.id }}">
+                  <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+                    <i class="bi bi-heart"></i>
+                  </button>
+                  <span class="count">{{ p.likes }}</span>
+                </div>
+              </form>
+              {% else %}
+              <a href="{% url 'userauths:sign-in' %}">
+                <div class="fav-counter  {% if p.id in liked_products %}liked{% endif %}"  data-product-id="{{ p.id }}">
+                  <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+                    <i class="bi bi-heart"></i>
+                  </button>
+                  <span class="count">{{ p.likes }}</span>
+                </div>
+              </a>
+
+              {% endif %}
+
+                  
+                  <div class="featured-item-image">
+                      <a href="{% url 'core:product-details' p.pid %}"><img src="{{p.image.url}}" width="304" height="340" alt="" loading="lazy"></a>
+                    </div>
+                  
+              
+            
+              <div class="featured-item-info">
+                <div class="title"><a href="{% url 'core:product-details' p.pid %}">{{p.title}}</a></div>
+                <div class="item-meta">
+                  <span class="avatar box-26">
+                      <a href="{% url 'core:seller_profile' p.user.username %}">
+                        <img src="{{ p.user.profile.image.url }}" height="52" width="52" alt=""  loading="lazy">
+                      </a>
+                      {% if p.user.profile.verified == True %}
+                    <span class="verified"><svg class="crumina-icon"><use xlink:href="#check-icon"></use></svg></span>
+                    {% else %}
+                    
+                    {%endif%}
+                    </span>
+                    {{ p.user.profile.user }}
+                </div>
+                <div class="featured-bidding-section">
+                  <div class="featured-item-pricebox">
+                    <div class="price">₦{{p.price|intcomma}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+  </div>
+  {% endfor%}
+  
+  </div>
+  </div>
+ 
+  </div>
+</div>
+</div>
+
+
+
+<div class="create-area pt-10  pb-70">
+<div class="container">
+<div class="section-title text-center">
+<h2>Create And Sell Your Items</h2>
+</div>
+<div class="row align-items-center pt-45">
+<div class="col-lg-6">
+<div class="create-img">
+<img src="{% static 'assets/images/57.jpg' %}" alt="Images">
+</div>
+</div>
+<div class="col-lg-6">
+<div class="create-card-right pl-20">
+<div class="row justify-content-center">
+<div class="col-lg-6 col-6">
+<div class="create-card">
+<img src="{% static 'assets/images/create/create-icon1.png' %}" alt="Images">
+<h3><a href="add-wallet.html">Set Up Your Wallet</a></h3>
+<p>connect wallet by clicking the wallet icon in the top right corner. Learn about the wallets <a href="log-in.html"> we support.</a></p>
+</div>
+</div>
+<div class="col-lg-6 col-6">
+<div class="create-card">
+<img src="{% static 'assets/images/create/create-icon2.png' %}" alt="Images">
+<h3><a href="{% url 'userauths:sign-in'%}">Create Your Collection</a></h3>
+<p>Click Create and Add social links, a description, profile & banner images, and set a secondary sales fee.</p>
+</div>
+</div>
+<div class="col-lg-6 col-6">
+<div class="create-card">
+<img src="{% static 'assets/images/create/create-icon3.png' %}" alt="Images">
+<h3><a href="help-center.html"> Add Your NFTs</a></h3>
+<p>Upload your work (image, video, audio, or 3D art), add a title and description, and customize your NFTs</p>
+</div>
+</div>
+<div class="col-lg-6 col-6">
+<div class="create-card">
+<img src="{% static 'assets/images/create/create-icon4.png' %}" alt="Images">
+<h3><a href="activity.html">List Them For Sale</a></h3>
+<p>Choose between auctions, fixed-price listings, and declining-price listings. You choose how you want to sell your NFTs</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="container">
+<div class="call-to-action-box">
+  <div class="animated-img"></div>
+  <div class="call-to-action-text">
+    <div class="subtitle">COME AND JOIN THEM!</div>
+    <div class="h2">Become a Creator!</div>
+  </div>
+  <div class="subscribe-form">
+    <a href="{% url 'userauths:sign-in' %}" class="btn btn-normal btn-dark">Start Selling!</a>
+  </div>
+</div>
+
+</div>
+
+
+<div class="collections-area pt-100 pb-70">
+  <div class="container">
+    <div class="section-title">
+      <h2>Featured</h2>
+    </div>
+    <div class="row pt-45">
+      {% for p in profiles %}
+      <div class="col-lg-3 col-6">
+        <div class="creator-item">
+          <div class="creator-cover">
+            <img src="{% static 'assets/images/shapes-big.png' %}" alt="">
+          </div>
+          <div class="creator-wrapper">
+            <div class="creator-info-wrapper">
+              <div class="creator-info">
+                <div class="avatar box-64">
+                  <a href="{% url 'core:seller_profile' p.user.username %}"> 
+                    <img src="{{ p.image.url }}" alt="avatar">
+                    {% if p.user.profile.verified == True %}
+                    <span class="verified"><svg class="crumina-icon"><use xlink:href="#check-icon"></use></svg></span>
+                    {% else %}
+                    
+                    {%endif%}
+                  </a>
+                </div>
+                <div class="title">
+                  <a href="{% url 'core:seller_profile' p.user.username %}">{{ p.user.username }}</a>
+                </div>
+                <div class="item-meta"><span class="gradient-text">@{{ p.user.username }}</span></div>
+              </div>
+              <div class="follow-me">
+                {% if request.user.is_authenticated %}
+                  {% if request.user != p.user %}
+                    <form method="POST" action="{% url 'items:follow_unfollow' p.user.id %}?next={{ request.path }}">
+                      {% csrf_token %}
+                      {% if p.is_following %}
+                        <button type="submit" class="btn btn-small btn-fuchsia">Unfollow!</button>
+                      {% else %}
+                        <button type="submit" class="btn btn-small btn-dark">Follow!</button>
+                      {% endif %}
+                    </form>
+                  {% endif %}
+                {% else %}
+                <a href="{% url 'userauths:sign-in' %}">
+                  <button class="btn btn-small btn-dark" >Follow!</button>
+                </a>
+                {% endif %}
+              </div>
+            </div>
+            <ul class="social-icons-list">
+              <li class="social-icon icon-border"><a href="#"><i class="bi bi-whatsapp"></i></a></li>
+              <li class="social-icon icon-border"><a href="#"><svg class="crumina-icon">
+                    <use xlink:href="#facebook-icon"></use>
+                  </svg></a></li>
+              <li class="social-icon icon-border"><a href="#"><svg class="crumina-icon">
+                    <use xlink:href="#youtube-icon"></use>
+                  </svg></a></li>
+              <li class="social-icon icon-border"><a href="#"><svg class="crumina-icon">
+                    <use xlink:href="#instagram-icon"></use>
+                  </svg></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

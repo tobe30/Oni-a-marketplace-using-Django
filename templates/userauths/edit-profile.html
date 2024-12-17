@@ -1,0 +1,161 @@
+{% extends "include/base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="content-wrapper">
+    <div class="container pb-0">
+        <!-- Profile Detail Area Start-->
+        <div class="video-block section-padding">
+            <div class="main-item">
+                <form method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-12 px-0">
+                        <div class="profile-area-dashboard">
+                            <div class="shapes-bg-big"></div>
+                            <div class="my-dash-profile">
+                                {% if profile.image %}
+                                <img src="{{ profile.image.url }}" id="profile-pic" alt="">
+                                {% else %}
+                                <img src="{% static 'assets/images/user-1.png' %}" id="profile-pic" alt="">
+                                {% endif %}
+                                <div class="add-dp" id="OpenImgUpload">
+                                    {{form.image}}
+                                    <label for="input-file" ><i class="bi bi-camera"></i></label>
+                                </div>
+                            </div>
+                            <div class="profile-dashbd-dt">
+                                <div class="item-title-dashbd">
+                                    <h4>{{ profile.full_name }}</h4>
+                                    <p><span><i class="fas fa-map-marker-alt"></i></span> {{ profile.location }}</p>
+                                </div>
+                                <div class="dashboard-main-dt">
+                                    <ul>
+                                        <li>
+                                            <div class="lisitng-dtl">
+                                                <ins>15</ins>
+                                                <span>Listings</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="lisitng-dtl">
+                                                <ins>150</ins>
+                                                <span>Followers</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="lisitng-dtl">
+                                                <ins>265</ins>
+                                                <span>Following</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button class="setting-btn" onclick="window.location.href = 'setting.html';">Setting</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Profile Detail Area End-->
+                <!--Nav Tabs Start -->
+                <div class="row">
+                    <div class="dashbd-detail-tabs">
+                        <div class="col-xl-12 col-md-12 col-sm-12 px-0">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Profile</a>
+                                </li>
+                            </ul>
+                            <!--Nav Tabs End -->
+                            <!--Tabs Panes Start -->
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                                  
+                                        {% csrf_token %}
+                                        <div class="row lr-row">
+                                            <div class="col-md-6">
+                                                <div class="account-detls">
+                                                    <div class="email-input">
+                                                        <div class="midemail">
+                                                            <img src="{% static 'images/svg/pencil.svg' %}" alt="">
+                                                            <h6>Name</h6>
+                                                        </div>
+                                                        <div class="inputs">
+                                                            {{ form.full_name }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="account-detls">
+                                                    <div class="email-input">
+                                                        <div class="midemail">
+                                                            <img src="{% static 'images/svg/pencil.svg' %}" alt="">
+                                                            <h6>About</h6>
+                                                        </div>
+                                                        <div class="inputs">
+                                                            {{ form.bio }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="account-detls">
+                                                    <div class="email-input">
+                                                        <div class="midemail">
+                                                            <img src="{% static 'images/svg/location.svg' %}" alt="">
+                                                            <h6>Address</h6>
+                                                        </div>
+                                                        <div class="inputs">
+                                                            {{ form.location }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="account-detls">
+                                                    <div class="email-input">
+                                                        <div class="midemail">
+                                                            <img src="{% static 'images/svg/phone.svg' %}" alt="">
+                                                            <h6>Phone Number</h6>
+                                                        </div>
+                                                        <div class="inputs">
+                                                            {{ form.phone }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="account-detls">
+                                                    <div class="email-input">
+                                                        <div class="midemail">
+                                                            <img src="{% static 'images/svg/url.svg' %}" alt="">
+                                                            <h6>Website</h6>
+                                                        </div>
+                                                        <div class="inputs">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="sends pb-0">
+                                                    <input type="submit" value="Save Now">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                </div>
+                            </div>
+                            <!--Tabs Panes End -->
+                        </div>
+                    </div>
+                </div>
+                <!--Tab Links End-->
+            </form>
+            </div>                       
+        </div>
+    </div>
+</div>
+
+<script>
+    let profilePic = document.getElementById("profile-pic");
+    let inputFile = document.getElementById("input-file");
+
+    inputFile.onchange = function() {
+        profilePic.src = URL.createObjectURL(inputFile.files[0]);
+    }
+</script>
+{% endblock content %}

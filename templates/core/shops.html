@@ -1,0 +1,200 @@
+{% extends "include/base.html" %}
+
+{% block content %}
+{% load static %}
+{% load humanize %}
+
+<style>
+  input[type="range"] {
+    -webkit-appearance: none;
+    margin-right: 15px;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+    background-image: linear-gradient(#3bb77e, #3bb77e);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 100%;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #3bb77e;
+    cursor: ew-resize;
+    box-shadow: 0 0 2px 0 #555;
+    transition: background .3s ease-in-out;
+  }
+
+  input[type=range]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+  }
+</style>
+
+<div class="inner-banner inner-bg4">
+  <div class="container">
+    <div class="inner-title">
+      <h3>Discover All Onitsha Products</h3>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li>Discover</li>
+        <li>Products</li>
+      </ul>
+      <div class="inner-shape">
+        <img src="{% static 'assets/images/inner-banner/inner-shape1.png' %}" alt="Images">
+        <img src="{% static 'assets/images/inner-banner/inner-shape2.png' %}" alt="Images">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="discover-area pt-100 pb-70">
+  <div class="container">
+    <div class="section-title">
+      <h2>Discover Assets</h2>
+    </div>
+    <div class="row pt-45">
+      <div class="col-lg-3">
+        <div class="side-bar-area pl-20">
+          <div class="side-bar-widget">
+            <h3 class="title">Filter <a href="{% url 'core:products' %}">Clear All</a></h3>
+            <form action="{% url 'core:products' %}" method="GET" class="search-form">
+              <input name="query" type="text" class="form-control" value="{{ query }}" placeholder="Search keyword">
+              <button type="submit">
+                <i class="ri-search-line"></i>
+              </button>
+            </form>
+          </div>
+
+          <div class="side-bar-widget">
+            <h3 class="title">Sort By</h3>
+            <div class="form-group select-group">
+                <form id="sort-form" method="GET" action="{% url 'core:products' %}">
+                    <select name="sort" class="form-select form-control" onchange="this.form.submit()">
+                        <option value="">Sort By (Default)</option>
+                        <option value="top_liked">Most Liked</option>
+                        <option value="low_liked">Least Liked</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+        
+        
+
+          <div class="side-bar-widget-categories">
+            <h3 class="title">Categories</h3>
+            <form id="categories-form" method="GET" action="{% url 'core:products' %}">
+              <ul>
+                {% for c in category %}
+                  <li>
+                    <>
+                      <input class="form-check-input filter-checkbox" type="checkbox" name="categories" value="{{ c.id }}" onchange="this.form.submit()">
+                      &nbsp;&nbsp;{{ c.title }}
+                    </`label>
+                  </li>
+                {% endfor %}
+              </ul>
+            </form>
+          </div>
+
+          <div class="side-bar-widget range">
+            <h3>Price Range</h3>
+            <form id="price-form" method="GET" action="{% url 'core:products' %}">
+              <input 
+                  type="range" 
+                  name="max_price" 
+                  class="slider-range" 
+                  value="{{ min_max_price.price__max|floatformat:2 }}" 
+                  min="{{ min_max_price.price__min }}" 
+                  max="{{ min_max_price.price__max }}" 
+                  oninput="document.getElementById('slider-range-value2').innerText = this.value; document.getElementById('max_price_input').value = this.value"
+              >
+          
+              <div class="range-inner mb-2">
+                  <div class="d-flex justify-content-between">
+                      <div class="caption">
+                          From: <strong id="slider-range-value1" class="text-brand">{{ min_max_price.price__min|floatformat:2|intcomma }}</strong>
+                      </div>
+                      <div class="caption">
+                          To: <strong id="slider-range-value2" class="text-brand">{{ min_max_price.price__max|floatformat:2|intcomma }}</strong>
+                      </div>
+                  </div>
+          
+                  <!-- Hidden input to capture the max price -->
+                  <input type="text" class="form-control" name="max_price" id="max_price_input" value="{{ min_max_price.price__max|floatformat:2 }}" />
+              </div>
+          
+              <button class="btn btn-green mt-20 w-100" type="submit">Filter</button>
+          </form>
+          
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-9">
+        <div class="row justify-content-center" id="filtered-product">
+          {% for p in product %}
+            <div class="col-lg-4 col-md-6">
+              <div class="featured-item">
+                <div class="featured-item-wrapper">
+                  <div class="featured-item-content">
+                    <form action="{% url 'core:like_product' p.id %}" method="post" class="like-form">
+                      {% csrf_token %}
+                      <div class="fav-counter {% if p.id in liked_products %}liked{% endif %}" data-product-id="{{ p.id }}">
+                        <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
+                          <i class="bi bi-heart"></i>
+                        </button>
+                        <span class="count">{{ p.likes }}</span>
+                      </div>
+                    </form>
+
+                    <div class="featured-item-image">
+                      <a href="{% url 'core:product-details' p.pid %}"><img src="{{ p.image.url }}" width="304" height="340" alt="" loading="lazy"></a>
+                    </div>
+
+                    <div class="featured-item-info">
+                      <div class="title"><a href="{% url 'core:product-details' p.pid %}">{{ p.title }}</a></div>
+                      <div class="item-meta">
+                        <span class="avatar box-26">
+                          <a href="08-profile-page.html">
+                            <img src="{{ p.user.profile.image.url }}" height="52" width="52" alt="" loading="lazy">
+                          </a>
+                          <span class="verified"><svg class="crumina-icon"><use xlink:href="#check-icon"></use></svg></span>
+                        </span>
+                        {{ p.user.profile.user }}
+                      </div>
+                      <div class="featured-bidding-section">
+                        <div class="featured-item-pricebox">
+                          <div class="price">₦{{ p.price|intcomma }}</div>
+                        </div>
+                        <form action="{% url 'items:saved' p.id %}" method="POST" class="save-form" data-product-id="{{ p.id }}">
+                          {% csrf_token %}
+                          <button type="button" class="pd-detail__click-wrap save-button" data-product-id="{{ p.id }}">
+                            {% if p in request.user.profile.saved_products.all %}
+                              <i class="bi bi-bookmark-fill"></i>
+                            {% else %}
+                              <i class="bi bi-bookmark"></i>
+                            {% endif %}
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+             <center> <h1 style="color: red;">No products found.</h1> </center>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

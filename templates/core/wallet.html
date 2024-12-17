@@ -1,0 +1,171 @@
+{% extends "include/base.html"%}
+
+{% block content%}
+{% load static %}
+{% load humanize %}
+
+<div class="content-wrapper">
+    <div class="container pb-0">
+        <!-- Profile Detail Area Start-->
+        <div class="container mt-5">
+          <div class="row">
+              <!-- Wallet Card (Left) -->
+              <div class="col-md-4">
+                  <div class="card shadow wallet" style="max-width: 400%;">
+                      <div class="card-body text-center">
+                          <!-- Wallet Title -->
+                          <h4 class="card-title"> <i class="bi bi-wallet-fill"></i> Wallet</h4>
+      
+                          <!-- Balance Display: Balance on the left, Amount on the right -->
+                          <div class="d-flex justify-content-between align-items-center my-3">
+                              <h3> Balance</h3>
+                              <h3 class="text">₦{{wallet.balance|intcomma}}</h3>
+                          </div>
+      
+                          <!-- Deposit and Send Buttons -->
+                          <div class="d-flex justify-content-around my-4">
+                              <button class="btn " data-bs-toggle="modal" data-bs-target="#depositModal"> <i class="bi bi-plus"></i></button>
+                              <button class="btn" data-bs-toggle="modal" data-bs-target="#sendModal"> <i class="bi bi-arrow-right"></i> </button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      
+              <!-- Transaction Details (Right) -->
+              <div class="col-md-8 mb-5">
+                <div class="card shadow trans" style="max-width: 100%;">
+                    <div class="card-body">
+                        <!-- Transaction History Title -->
+                        <h4 class="card-title">Transaction History</h4>
+            
+                        <!-- Transaction List Table -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+
+                            {% for transaction in transactions %}
+                            <tbody>
+
+                                {% if transaction.transaction_type == 'bought' %}
+                                <tr>
+                                    <td>
+                                        {{transaction.receiver}} bought {{transaction.product}}
+                                    </td>
+                                    <td class="text">+ ₦{{ transaction.amount|intcomma }}</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                </tr>
+                                {%endif%}
+
+                                {% if transaction.transaction_type == 'purchased' %}
+                                <tr>
+                                    <td>
+                                        You purchased {{transaction.product}}
+                                    </td>
+                                    <td class="textd">- ₦{{ transaction.amount|intcomma }}</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                </tr>
+                                {%endif%}
+
+                                {% if transaction.transaction_type == 'deposited' %}
+                                <tr>
+                                    <td>
+                                        You deposited
+                                    </td>
+                                    <td class="text">+ ₦{{ transaction.amount|intcomma }}</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                </tr>
+                                {%endif%}
+                                {% if transaction.transaction_type == 'credit' %}
+                                <tr>
+                                    <td>
+                                        Received from {{ transaction.sender }}
+                                    </td>
+                                    <td class="text">+ ₦{{ transaction.amount|intcomma }}</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                </tr>
+                                {%endif%}
+                                {% if transaction.transaction_type == 'debit' %}
+                                <tr>
+                                    <td>Sent to {{ transaction.receiver }}</td>
+                                    <td class="textd">-₦{{ transaction.amount|intcomma }}</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                </tr>
+                                 {%endif%}   
+                                 {% if transaction.status == 'pending' %}
+                                <tr>
+                                  <td>Sent to Bob</td>
+                                  <td class=""> $80.00</td>
+                                  <td><span class="badge bg-primary">Pending</span></td>
+                              </tr>
+                              {%endif%}
+                            </tbody>
+                            {%endfor%}
+                            
+                            
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+          </div>
+      </div>
+      
+      <!-- Deposit Modal -->
+      <div class="modal fade" id="depositModal" tabindex="-1" aria-labelledby="depositModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="depositModalLabel">Deposit Funds</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <form action="{% url 'core:deposit_funds' %}" method="post">
+                          {% csrf_token %}
+                          <div class="mb-3">
+                              <label for="depositAmount" class="form-label">Amount</label>
+                              <input type="number" class="form-control" id="depositAmount" name="amount" placeholder="Enter amount" required>
+                          </div>
+                          <button type="submit" class="btn btn-primary">Deposit</button>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Send Modal -->
+      <div class="modal fade" id="sendModal" tabindex="-1" aria-labelledby="sendModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="sendModalLabel">Send Funds</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <form action="{% url 'core:process_send_funds' %}" method="post">
+                          {% csrf_token %}
+                          <div class="mb-3">
+                              <label for="recipient" class="form-label">Recipient</label>
+                              <input type="text" class="form-control" id="recipient" name="receiver_wallet_id" placeholder="Recipient's wallet id" required>
+                          </div>
+                          <div class="mb-3">
+                              <label for="sendAmount" class="form-label">Amount</label>
+                              <input type="number" class="form-control" id="sendAmount" name="amount" placeholder="Enter amount" required>
+                          </div>
+                          <button type="submit" class="btn btn-success">Send</button>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Bootstrap JS (required for modals) -->
+           </div>
+        </div>
+
+{% endblock content %}

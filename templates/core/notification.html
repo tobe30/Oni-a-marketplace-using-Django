@@ -1,0 +1,94 @@
+{% extends "include/base.html"%}
+
+{% block content%}
+{% load static %}
+{% load humanize %}
+
+<style>
+    body {
+        background-color: #f8f9fa; /* Light gray background for contrast */
+    }
+    .notification-container {
+        margin: 20px auto;
+        margin-top: 70px;
+        max-width: 600px;
+        background-color: white; /* White background for the notification box */
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden; /* Rounded corners */
+    }
+    .notification-header {
+        background-color:  rgb(1, 66, 1); /* Primary color */
+        color: white;
+        padding: 15px;
+        font-weight: bold;
+        width: 100%;
+    }
+    .notification {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    .notification:last-child {
+        border-bottom: none; /* Remove border from last notification */
+    }
+    .notification-icon {
+        font-size: 1.5rem;
+        margin-right: 15px;
+        flex-shrink: 0; /* Prevent shrinking */
+    }
+    .notification-content {
+        flex-grow: 1; /* Allow content to grow */
+    }
+    .notification-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .notification-message {
+        margin: 0;
+        color: #6c757d; /* Bootstrap gray */
+    }
+    .notification-date {
+        font-size: 0.85rem;
+        color: #adb5bd; /* Bootstrap light gray */
+        margin-top: 5px;
+    }
+    .btn-close {
+        background: transparent;
+        border: none;
+        color: #6c757d; /* Bootstrap gray */
+        cursor: pointer;
+    }
+    .btn-close:hover {
+        color: #dc3545; /* Danger color for hover effect */
+    }
+</style>
+
+
+
+<div class="container notification-container">
+    <div class="notification-header">Notifications</div>
+
+    <!-- Notification 1 -->
+    {% for notification in notifications %}
+    <div class="notification">
+        <i class="bi bi-bell notification-icon text-success"></i>
+        <div class="notification-content">
+            <div class="notification-title">{{ notification.title }}</div>
+            <p class="notification-message">{{ notification.message }}</p>
+            <div class="notification-date">Date: {{ notification.date|date:"F j, Y" }}</div>
+        </div>
+        <button type="button" class="btn-close" aria-label="Close" onclick="this.closest('.notification').style.display='none';">
+            <i class="bi bi-x"></i>
+        </button>
+    </div>
+{% empty %}
+<div class="notification">
+    <p>No notifications available.</p>
+</div>
+{% endfor %}
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,457 @@
+{% extends "include/base.html"%}
+
+{% block content%}
+{% load static %}
+
+    <style>
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .image-preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+
+    
+    <section class="adpost-part">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    {% if form.errors or form.non_field_errors %}
+    <div class="mb-3 p-6 bg-danger rounded-xl">
+        {% for field in form %}
+        {{ field.errors }}
+        {% endfor %}
+
+        {{ form.non_field_errors}}
+    </div>
+    {% endif %}
+                    <form class="adpost-form" enctype="multipart/form-data" method="POST">
+                        {% csrf_token %}
+                        <div class="adpost-card">
+                            <div class="adpost-title">
+                                <h3>Post Ad</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Product Title</label>
+                                        {{form.title}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">product Description</label>
+                                        {{form.description}}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Youtube Link</label>
+                                        {{form.link}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Product Category</label>
+                                        {{form.category}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Price</label>
+                                        {{form.price}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Year</label>
+                                        {{form.year}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Conditon</label>
+                                        {{ form.condition }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Size</label>
+                                        {{form.size}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Location</label>
+                                        {{form.location}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Warranty</label>
+                                        {{form.warranty}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Color</label>
+                                        {{form.color}}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Product Brand</label>
+                                        {{form.brand}}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Ad Features</label>
+                                        {{form.features}}
+                                    </div>
+                                </div>
+                                <!-- Vehicle-Specific Fields -->
+                                <div id="vehicleFields" class="d-none">
+                                    <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="mileage" class="form-label">Mileage</label>
+                                        {{form.mileage}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="transmission" class="form-label">Transmission</label>
+                                        {{form.transmission}}
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="fuel_type" class="form-label">Fuel Type</label>
+                                        {{form.fuel_type}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="engine_size" class="form-label">Engine Size</label>
+                                        {{form.engine_size}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="number_of_doors" class="form-label">Number of Doors</label>
+                                        {{form.number_of_doors}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                        <label for="number_of_seats" class="form-label">Number of Seats</label>
+                                        {{form.number_of_seats}}
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+
+                                 <!-- Real Estate-Specific Fields -->
+                    <div id="realEstateFields" class="d-none">
+                        <div class="row">
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                    <label for="property_type" class="form-label">Property Type</label>
+                    {{form.property_type}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="bedrooms" class="form-label">Bedrooms</label>
+                    {{form.bedrooms}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="bathrooms" class="form-label">Bathrooms</label>
+                    {{form.bathrooms}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="square_feet" class="form-label">Square Feet</label>
+                    {{form.square_feet}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="lot_size" class="form-label">Lot Size</label>
+                    {{form.lot_size}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="year_built" class="form-label">Year Built</label>
+                    {{form.year_built}}
+                    </div>
+                </div>
+                </div>
+                    </div>
+
+                    <!-- Electronics-Specific Fields -->
+                    <div id="electronicsFields" class="d-none">
+                <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="screen_size" class="form-label">Screen Size</label>
+                    {{form.year_built}}
+                        </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="battery_life" class="form-label">Battery Life</label>
+                    {{form.battery_life}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="storage_capacity" class="form-label">Storage Capacity</label>
+                    {{form.storage_capacity}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="ram" class="form-label">RAM</label>
+                    {{form.ram}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="processor" class="form-label">Processor</label>
+                    {{form.processor}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="camera_quality" class="form-label">Camera Quality</label>
+                    {{form.camera_quality}}
+                    </div>
+                </div>
+                </div>
+                        </div>
+
+                     <!-- Furniture-Specific Fields -->
+            <div id="furnitureFields" class="d-none">
+                <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label for="material" class="form-label">Material</label>
+                    {{form.material}}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label for="dimensions" class="form-label">Dimensions</label>
+                    {{form.dimensions}}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label for="weight" class="form-label">Weight</label>
+                    {{form.weight}}
+                    </div>
+                </div>
+                </div>
+                </div>
+
+                   <!-- Clothes-Specific Fields -->
+                 <div id="clothesFields" class="d-none">
+                <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="clothing_size" class="form-label">Clothing Size</label>
+                    {{form.clothing_size}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="fabric_type" class="form-label">Fabric Type</label>
+                    {{form.fabric_type}}
+                    </div>
+                </div>
+                </div>
+                    </div>
+
+                    <!-- Toy-Specific Fields -->
+            <div id="toyFields" class="d-none">
+                <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="age_group" class="form-label">Age Group</label>
+                    {{form.age_group}}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                    <label for="safety_standards" class="form-label">Safety Standards</label>
+                    {{form.safety_standards}}
+                    </div>
+                </div>
+            </div>
+            </div>
+
+                              
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-label">ad tag</label>
+                                        
+                                       {{form.tags}}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label for="">Add Image</label>
+                                    <div class="image-box mb-5" id="imageBox1">
+                                        <img id="image1" src="{{product.image.url}}" style="width: 150px;" alt="Image 1">
+                                      </div>
+                                      <div class="custom-file ">
+                                          <label for="imageInput1" class="btn">Choose image</label>
+                                          {{form.image}}
+                                      </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <p style="margin-bottom: -1px;">Add more images for this category at least 5 <br> <span style="color: red;"> jpg, png & jpeg</span></p><br>
+                                <div class="custom-file">
+                                    <label for="images" class="btn">Choose image</label>
+                                    <input type="file" name="images" class="custom-file-input" id="images" accept=".jpg,.jpeg,.png" multiple >
+                                     
+                            </div>
+                            </div>
+                            <div id="imagePreview" class="image-preview"></div>
+
+
+                            <h6>Current Images</h6>
+                            <div>
+                                {% for image in existing_images %}
+                                <div>
+                                    <img src="{{ image.images.url }}" alt="Product Image" style="width: 100px; height: auto; margin: 5px;" />
+                                    <label>
+                                        <input type="checkbox" name="delete_images" value="{{ image.id }}"> Delete
+                                    </label>
+                                </div>
+                            {% endfor %}
+                            </div>
+
+
+                            <!-- Alert for Duplicate Images -->
+                            <div id="duplicateAlert" class="alert alert-warning" role="alert">
+                                You can't upload this image twice.
+                            </div>
+                
+                            <!-- Alert for Invalid File Type -->
+                            <div id="invalidFileAlert" class="alert alert-danger" role="alert">
+                                Only JPG, JPEG, and PNG files are allowed.
+                            </div>
+                            <div class="col-md-6">
+                            <button type="submit" class="">Post Add</button>
+                        </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    
+                </div>
+            
+            </div>
+        </div>
+    </section>
+
+
+
+    <script>
+        const categorySelect = document.getElementById('category');
+        const vehicleFields = document.getElementById('vehicleFields');
+        const realEstateFields = document.getElementById('realEstateFields');
+        const electronicsFields = document.getElementById('electronicsFields');
+        const furnitureFields = document.getElementById('furnitureFields');
+        const clothesFields = document.getElementById('clothesFields');
+        const toyFields = document.getElementById('toyFields');
+
+        categorySelect.addEventListener('change', function () {
+            const category = this.value;
+            
+            // Check the category value and toggle the visibility of fields
+            vehicleFields.classList.toggle('d-none', category !== '1');  // Cars
+            realEstateFields.classList.toggle('d-none', category !== '2' && category !== '3');  // Houses & Real Estate
+            electronicsFields.classList.toggle('d-none', category !== '4' && category !== '6' && category !== '7');  // Gadgets, Phones, Laptops
+            furnitureFields.classList.toggle('d-none', category !== '9');  // Furniture
+            clothesFields.classList.toggle('d-none', category !== '5');  // Clothes
+            toyFields.classList.toggle('d-none', category !== '8');  // Toys
+        });
+
+
+        function displayImage(inputId, imageId) {
+            var input = document.getElementById(inputId);
+            var image = document.getElementById(imageId);
+            if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function(e) {
+                image.src = e.target.result;
+              };
+              reader.readAsDataURL(input.files[0]);
+            }
+          }
+    </script>
+
+    <script>
+        const imagesInput = document.getElementById('images');
+        const imagePreview = document.getElementById('imagePreview');
+        const duplicateAlert = document.getElementById('duplicateAlert');
+        const invalidFileAlert = document.getElementById('invalidFileAlert');
+        const selectedFiles = new Set(); // To keep track of unique files
+
+        imagesInput.addEventListener('change', function () {
+            const files = Array.from(this.files);
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+            files.forEach(file => {
+                if (!allowedTypes.includes(file.type)) {
+                    invalidFileAlert.style.display = 'block';
+                    setTimeout(() => {
+                        invalidFileAlert.style.display = 'none';
+                    }, 3000); // Hide alert after 3 seconds
+                } else if (selectedFiles.has(file.name)) {
+                    duplicateAlert.style.display = 'block';
+                    setTimeout(() => {
+                        duplicateAlert.style.display = 'none';
+                    }, 3000); // Hide alert after 3 seconds
+                } else {
+                    selectedFiles.add(file.name);
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        imagePreview.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+
+    {% endblock content %}
