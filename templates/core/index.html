@@ -75,7 +75,7 @@
 <div class="featured-item">
   <div class="featured-item-wrapper">
     <div class="featured-item-content">
-      {% if request.user.is_autheticated %}
+      {% if user.is_authenticated %}
       <form action="{% url 'core:like_product' p.id %}" method="post"  class="like-form">
         {% csrf_token %}
         <div class="fav-counter  {% if p.id in liked_products %}liked{% endif %}"  data-product-id="{{ p.id }}">
